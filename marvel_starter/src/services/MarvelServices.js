@@ -1,20 +1,20 @@
 class MarvelServices {
-_apiBase = 'https://gateway.marvel.com:443/v1/public/'
-_apiKey = 'apikey=c1f00f72a9f386ef3acf7836ca583fba'
-
-    getResource = async (url) =>{
+    _apiBase = 'https://gateway.marvel.com:443/v1/public/'
+    _apiKey = 'apikey=c1f00f72a9f386ef3acf7836ca583fba'
+    getResource = async (url) => {
         let res = await fetch(url)
-        if(!res.ok) {
-            throw new Error(`Could not fetch ${url}, status: ${ res.status}`)
+        if (!res.ok) {
+            throw new Error(`Could not fetch ${url}, status: ${res.status}`)
         }
         return await res.json()
     }
 
-    getAllCharacters = ()=> {
+    getAllCharacters = () => {
         return this.getResource(`${this._apiBase}characters?limit=9&offset=210&${this._apiKey}`)
     }
-    getCharacter = (id)=> {
+    getCharacter = (id) => {
         return this.getResource(`${this._apiBase}characters/${id}?${this._apiKey}`)
     }
 }
+
 export default MarvelServices
