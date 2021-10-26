@@ -15,7 +15,7 @@ class CharList extends Component {
         error: false,
         newItemLoading: false,
         offset: 210,
-        charEnded:false
+        charEnded: false
     }
     marvelService = new MarvelServices()
 
@@ -30,13 +30,15 @@ class CharList extends Component {
             .then(this.onCharListLoaded)
             .catch(this.onError)
     }
+
     onCharListLoading = () => {
         this.setState({newItemLoading: true})
     }
+
     onCharListLoaded = (newCharList) => {
-    let ended = false
-        if (newCharList.length< 9 ){
-            ended= true
+        let ended = false
+        if (newCharList.length < 9) {
+            ended = true
         }
 
         this.setState(({char, offset}) => (
@@ -50,12 +52,8 @@ class CharList extends Component {
         ))
     }
 
-    // onCharLoading = () => {
-    //     this.setState({loading: true})
-    // }
-
     onError = () => {
-        this.setState({error: true})
+        this.setState({error: true, loading: false})
     }
 
     renderItems(arr) {
@@ -66,7 +64,6 @@ class CharList extends Component {
             }
 
             return (
-
                 <li className="char__item"
                     key={item.id}
                     onClick={() => this.props.onCharSelected(item.id)}>
@@ -80,7 +77,7 @@ class CharList extends Component {
     }
 
     render() {
-        const {char, loading, error, offset, newItemLoading,charEnded} = this.state
+        const {char, loading, error, offset, newItemLoading, charEnded} = this.state
         const items = this.renderItems(char)
         const errorMessage = error ? <ErrorMessage/> : null
         const spinner = loading ? <Spinner/> : null
@@ -99,7 +96,7 @@ class CharList extends Component {
                     className="button button__main button__long"
                     onClick={() => this.onRequest(offset)}
                     disabled={newItemLoading}
-                    style={{'display': charEnded ? 'none':'block' }}
+                    style={{'display': charEnded ? 'none' : 'block'}}
                 >
                     <div className="inner">load more</div>
                 </button>
