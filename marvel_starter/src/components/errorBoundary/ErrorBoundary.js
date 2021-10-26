@@ -10,16 +10,20 @@ class ErrorBoundary extends React.Component {
         error: false
     }
 
+    static getDerivedStateFromError(error) {
+        return {error: true}
+    }
+
     componentDidCatch(error, errorInfo) {
         console.log(error, errorInfo)
         this.setState({error: true})
     }
 
     render() {
-     if(this, this.state.error){
-         return <ErrorMessage />
-     }
-     return this.props.children
+        if (this, this.state.error) {
+            return <ErrorMessage/>
+        }
+        return this.props.children
     }
 }
 

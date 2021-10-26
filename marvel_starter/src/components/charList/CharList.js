@@ -1,5 +1,4 @@
 import './charList.scss';
-import abyss from '../../resources/img/abyss.jpg';
 import {Component} from "react";
 import MarvelServices from "../../services/MarvelServices";
 import Spinner from "../Spiner/Spiner";
@@ -13,25 +12,50 @@ class CharList extends Component {
     state = {
         char: [],
         loading: true,
-        error: false
+        error: false,
+        newItemLoading: false,
+        offset: 210,
+        charEnded:false
     }
     marvelService = new MarvelServices()
 
     componentDidMount() {
-        this.updateChar()
+        this.onRequest()
     }
 
-    updateChar = () => {
-        this.onCharLoading()
+    onRequest = (offset) => {
+        this.onCharListLoading()
         this.marvelService
-            .getAllCharacters()
-            .then(this.onCharLoad)
+            .getAllCharacters(offset)
+            .then(this.onCharListLoaded)
+            .catch(this.onError)
     }
-    onCharLoad = (char) => {
-        this.setState({char, loading: false})
+    onCharListLoading = () => {
+        this.setState({newItemLoading: true})
     }
-    onCharLoading = () => {
-        this.setState({loading: true})
+    onCharListLoaded = (newCharList) => {
+    let ended = false
+        if (newCharList.length< 9 ){
+            ended= true
+        }
+
+        this.setState(({char, offset}) => (
+            {
+                char: [...char, ...newCharList],
+                loading: false,
+                newItemLoading: false,
+                offset: offset + 9,
+                charEnded: ended
+            }
+        ))
+    }
+
+    // onCharLoading = () => {
+    //     this.setState({loading: true})
+    // }
+
+    onError = () => {
+        this.setState({error: true})
     }
 
     renderItems(arr) {
@@ -40,7 +64,6 @@ class CharList extends Component {
             if (item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
                 imgStyle = {'objectFit': 'unset'};
             }
-
 
             return (
 
@@ -57,12 +80,12 @@ class CharList extends Component {
     }
 
     render() {
-        const {char, loading, error} = this.state
+        const {char, loading, error, offset, newItemLoading,charEnded} = this.state
         const items = this.renderItems(char)
         const errorMessage = error ? <ErrorMessage/> : null
         const spinner = loading ? <Spinner/> : null
 
-        const content = !(loading || error)? items: null
+        const content = !(loading || error) ? items : null
 
         return (
             <div className="char__list">
@@ -72,7 +95,12 @@ class CharList extends Component {
                     {content}
 
                 </ul>
-                <button className="button button__main button__long">
+                <button
+                    className="button button__main button__long"
+                    onClick={() => this.onRequest(offset)}
+                    disabled={newItemLoading}
+                    style={{'display': charEnded ? 'none':'block' }}
+                >
                     <div className="inner">load more</div>
                 </button>
             </div>
