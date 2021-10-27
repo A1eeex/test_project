@@ -8,9 +8,11 @@ import {Component} from "react";
 import ErrorBoundary from "../errorBoundary/ErrorBoundary";
 
 class App extends Component {
+
     state = {
         selectedChar: null
     }
+
     onCharSelected = (id)=> {
         this.setState({selectedChar: id})
         console.log(id)

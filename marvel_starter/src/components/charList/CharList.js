@@ -9,6 +9,19 @@ class CharList extends Component {
         super(props);
     }
 
+    refItems = []
+
+    setRef = (ref) => {
+        this.refItems.push(ref)
+    }
+
+    addFocus = (id) => {
+        this.refItems.forEach((item)=>{
+            item.classList.remove('char__item_selected')
+        })
+        this.refItems[id].classList.add('char__item_selected')
+    }
+
     state = {
         char: [],
         loading: true,
@@ -57,7 +70,7 @@ class CharList extends Component {
     }
 
     renderItems(arr) {
-        const items = arr.map((item) => {
+        const items = arr.map((item, index) => {
             let imgStyle = {'objectFit': 'cover'};
             if (item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
                 imgStyle = {'objectFit': 'unset'};
@@ -65,8 +78,12 @@ class CharList extends Component {
 
             return (
                 <li className="char__item"
+                    ref={this.setRef}
                     key={item.id}
-                    onClick={() => this.props.onCharSelected(item.id)}>
+                    onClick={() => {
+                        this.props.onCharSelected(item.id)
+                        this.addFocus(index)
+                    }}>
                     <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
                     <div className="char__name">{item.name}</div>
                 </li>
