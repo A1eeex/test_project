@@ -55,9 +55,15 @@ import './App.css';
 const Slider = (props) => {
     const [slide, setSlide] = useState(0)
     const [autoplay, setAutoplay] = useState(false)
-useEffect(()=> {
-    document.title= `Slide: ${slide}`
-})
+    useEffect(() => {
+        console.log('yo')
+        document.title = `Slide: ${slide}`
+
+        window.addEventListener('click', logging)
+        return () => {
+            window.removeEventListener('click', logging)
+        }
+    }, [slide])
 
     function changeSlide(i) {
         setSlide(slide => slide + i)
@@ -65,6 +71,10 @@ useEffect(()=> {
 
     function toggleAutoplay() {
         setAutoplay(autoplay => !autoplay)
+    }
+
+    function logging() {
+        console.log('Log')
     }
 
     return (
@@ -94,10 +104,13 @@ useEffect(()=> {
     )
 }
 
-
 function App() {
+    const [slider, setSlider]= useState(true)
     return (
-        <Slider/>
+        <>
+        <button onClick={()=> setSlider(false)} >click</button>
+            {slider ?  <Slider/>: null}
+        </>
     );
 }
 
