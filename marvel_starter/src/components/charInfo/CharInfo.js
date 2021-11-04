@@ -1,27 +1,28 @@
 import './charInfo.scss';
-import {Component} from "react";
+import {Component, useEffect} from "react";
 import MarvelServices from "../../services/MarvelServices";
 import ErrorMessage from "../errorMessage/ErrorMessage";
 import Spinner from "../Spiner/Spiner";
 import Skeleton from "../skeleton/Skeleton";
 import PropTypes from 'prop-types'
 
-class CharInfo extends Component {
-    constructor(props) {
-        super(props);
-    }
+const CharInfo=(props) => {
 
-    state = {
-        char: null,
-        loading: false,
-        error: false
-    }
+    const [char, setChar] = useState(null)
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(false)
 
-    marvelService = new MarvelServices()
 
-    componentDidMount() {
-        this.updateChar()
-    }
+
+    const marvelService = new MarvelServices()
+
+    useEffect(()=>{
+        updateChar()
+    },[])
+
+    useEffect(()=>{
+        updateChar()
+    },[])
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.charId !== prevProps.charId) {
@@ -33,7 +34,7 @@ class CharInfo extends Component {
         this.setState({error:true})
     }
 
-    updateChar = () => {
+    const updateChar = () => {
         const {charId} = this.props
         if (!charId) {
             return
