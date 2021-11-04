@@ -1,5 +1,5 @@
 import './charList.scss';
-import {Component, useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import MarvelServices from "../../services/MarvelServices";
 import Spinner from "../Spiner/Spiner";
 import ErrorMessage from "../errorMessage/ErrorMessage";
@@ -21,14 +21,13 @@ const CharList = (props) => {
 
     const onRequest = (offset) => {
         onCharListLoading()
-        marvelService
-            .getAllCharacters(offset)
+        marvelService.getAllCharacters(offset)
             .then(onCharListLoaded)
             .catch(onError)
     }
 
     const onCharListLoading = () => {
-        setNewItemLoading(true)
+        setNewItemLoading(newItemLoading=>true)
     }
 
     const onCharListLoaded = (newCharList) => {
@@ -39,7 +38,7 @@ const CharList = (props) => {
 
         setChar(char => [...char, ...newCharList])
         setLoading(false)
-        setNewItemLoading(true)
+        setNewItemLoading(false)
         setOffset(offset => offset + 9)
         setCharEnded(charEnded => ended)
     }
@@ -81,11 +80,9 @@ const CharList = (props) => {
         return items;
     }
 
-
     const items = renderItems(char)
     const errorMessage = error ? <ErrorMessage/> : null
     const spinner = loading ? <Spinner/> : null
-
     const content = !(loading || error) ? items : null
 
     return (
@@ -100,8 +97,7 @@ const CharList = (props) => {
                 className="button button__main button__long"
                 onClick={() => onRequest(offset)}
                 disabled={newItemLoading}
-                style={{'display': charEnded ? 'none' : 'block'}}
-            >
+                style={{'display': charEnded ? 'none' : 'block'}}>
                 <div className="inner">load more</div>
             </button>
         </div>
