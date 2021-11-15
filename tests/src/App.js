@@ -16,14 +16,9 @@ function useInputWithValidate(initialValue) {
     return {value: value, onChange: onChange,validateInp}
 }
 
-
 const Form = () => {
-
-
     const input = useInputWithValidate('')
     const textArea =useInputWithValidate('')
-
-
 
     const form_control = 'form-control'
     const color = input.validateInp() ? 'text-danger' : null
@@ -51,7 +46,6 @@ const Form = () => {
                         id="exampleFormControlTextarea1"
                         rows="3"
                     />
-
 
                 </div>
             </form>

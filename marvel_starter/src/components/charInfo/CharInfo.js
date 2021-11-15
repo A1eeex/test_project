@@ -1,6 +1,6 @@
 import './charInfo.scss';
 import { useEffect,useState } from "react";
-import MarvelServices from "../../services/MarvelServices";
+import useMarvelService from "../../services/UseMarvelService";
 import ErrorMessage from "../errorMessage/ErrorMessage";
 import Spinner from "../Spiner/Spiner";
 import Skeleton from "../skeleton/Skeleton";
@@ -12,7 +12,7 @@ const CharInfo = (props) => {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
 
-    const marvelService = new MarvelServices()
+    const marvelService = new useMarvelService()
 
     useEffect(() => {
         updateChar()
@@ -57,7 +57,6 @@ const CharInfo = (props) => {
                 {content}
             </div>
         )
-
 }
 
 const View = ({char}) => {
