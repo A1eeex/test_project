@@ -15,6 +15,8 @@
     }
     &__menu {
         ul {
+            text-decoration: none;
+            color: $main-color;
             display: flex;
             justify-content: space-between;
             font-weight: bold;
