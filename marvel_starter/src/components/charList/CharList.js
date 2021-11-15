@@ -7,28 +7,23 @@ import ErrorMessage from "../errorMessage/ErrorMessage";
 const CharList = (props) => {
 
     const [char, setChar] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(false)
+
     const [newItemLoading, setNewItemLoading] = useState(false)
     const [offset, setOffset] = useState(210)
     const [charEnded, setCharEnded] = useState(false)
 
-    const marvelService = useMarvelService()
+    const {loading, getAllCharacters, error} = useMarvelService()
 
     useEffect(() => {
-        onRequest()
+        onRequest(offset, true)
     }, [])
 
-    const onRequest = (offset) => {
-        onCharListLoading()
-        marvelService.getAllCharacters(offset)
+    const onRequest = (offset, initial = false) => {
+        initial ? setNewItemLoading(false): setNewItemLoading(true)
+        getAllCharacters(offset)
             .then(onCharListLoaded)
-            .catch(onError)
     }
 
-    const onCharListLoading = () => {
-        setNewItemLoading(newItemLoading=>true)
-    }
 
     const onCharListLoaded = (newCharList) => {
         let ended = false
@@ -37,16 +32,12 @@ const CharList = (props) => {
         }
 
         setChar(char => [...char, ...newCharList])
-        setLoading(false)
+
         setNewItemLoading(false)
         setOffset(offset => offset + 9)
         setCharEnded(charEnded => ended)
     }
 
-    const onError = () => {
-        setError(true)
-        setLoading(false)
-    }
     const refItems = useRef([])
 
     const addFocus = (id) => {
@@ -82,15 +73,14 @@ const CharList = (props) => {
 
     const items = renderItems(char)
     const errorMessage = error ? <ErrorMessage/> : null
-    const spinner = loading ? <Spinner/> : null
-    const content = !(loading || error) ? items : null
+    const spinner = loading && !newItemLoading? <Spinner/> : null
 
     return (
         <div className="char__list">
             <ul className="char__grid">
                 {spinner}
                 {errorMessage}
-                {content}
+                {items}
             </ul>
             <button
                 className="button button__main button__long"
